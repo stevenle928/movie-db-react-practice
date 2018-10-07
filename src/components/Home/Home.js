@@ -48,11 +48,11 @@ class Home extends Component { //if we DIDN'T import { Component } by itself, we
         .then(result => {
             console.log(result);
             this.setState({
-                movies:[...this.state.movies, ...result.results],
+                movies:[...this.state.movies, ...result.results], //This line takes old movie array and appends the new movie results onto it.
                 heroImage: this.state.heroImage || result.results[0],
                 loading: false,
                 currentPage: result.page,
-                totalPages: result.total_pages
+                totalPages: result.total_pages//total_pages variable comes from results you can find in console.log if you have logged it. or check TMDB API page
             })
         })
     }
@@ -60,8 +60,16 @@ class Home extends Component { //if we DIDN'T import { Component } by itself, we
     render() {
         return (
             <div className="rmdb-home">
-                <HeroImage />
-                <SearchBar />
+            {this.state.heroImage ? //This checks if heroImage (defined in Home's state)
+            //if heroImage is not null, meaning there is one then we return it. Otherwise, it will return nothing.
+                <div>
+                    <HeroImage 
+                        image={`${IMAGE_BASE_URL}${BACKDROP_SIZE}${this.state.heroImage.backdrop_path}`}
+                        title={this.state.heroImage.original_title}//These are predefined properties from movie db API
+                        text={this.state.heroImage.overview}
+                    />
+                    <SearchBar />
+                </div> : null }
                 <FourColGrid />
                 <Spinner />
                 <LoadMoreBtn />
